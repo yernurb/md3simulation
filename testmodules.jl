@@ -1,6 +1,8 @@
-include("DVector.jl")
+include("md3simulation.jl")
 
-using Main.DVector
+
+using Main.MD3simulation.DVector
+using Main.MD3simulation
 using Test
 
 vec2_1 = Vec2( 2.0, 3.0)
@@ -89,5 +91,22 @@ vec3_3 = Vec3(-1.0, 4.5,-2.5)
         v_test = vcopy(vec3_2)
         normalize!(v_test)
         @test (v_test.x == 1.0/√7.25) & (v_test.y == 2.0/√7.25) & (v_test.z == 1.5/√7.25)
+    end
+end
+
+w = World3D()
+# populate the world with preset particles. Largest particle's radius is 2.0
+test_populate_world!(w)
+create_linkcell!(w)
+
+@testset "world module" begin
+    @testset "world population" begin
+        @test w.Δ == 4.0
+        @test w.nx == 3
+        @test w.ny == 2
+        @test w.nz == 2
+        @test w.Lx == 12.0
+        @test w.Ly == 8.0
+        @test w.Lz == 8.0
     end
 end
