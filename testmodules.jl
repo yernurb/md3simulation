@@ -102,11 +102,20 @@ create_linkcell!(w)
 @testset "world module" begin
     @testset "world population" begin
         @test w.Δ == 4.0
-        @test w.nx == 3
-        @test w.ny == 2
-        @test w.nz == 2
-        @test w.Lx == 12.0
-        @test w.Ly == 8.0
-        @test w.Lz == 8.0
+        @test w.nx == 5
+        @test w.ny == 5
+        @test w.nz == 4
+        @test w.Lx == 20.0
+        @test w.Ly == 20.0
+        @test w.Lz == 16.0
+        @test cellindex(w, w.p[1].r⃗⁰) == (3, 3, 2) # center
+        @test cellindex(w, w.p[2].r⃗⁰) == (5, 3, 2) # radial top mid
+        @test cellindex(w, w.p[3].r⃗⁰) == (1, 3, 2) # radial bot mid
+        @test cellindex(w, w.p[4].r⃗⁰) == (3, 1, 2) # azimuthal left mid
+        @test cellindex(w, w.p[5].r⃗⁰) == (3, 5, 2) # azimuthal right mid
+        @test cellindex(w, w.p[6].r⃗⁰) == (5, 1, 2) # radial top / azimuthal left
+        @test cellindex(w, w.p[7].r⃗⁰) == (5, 5, 2) # radial top / azimuthal right
+        @test cellindex(w, w.p[8].r⃗⁰) == (1, 1, 2) # radial bot / azimuthal left
+        @test cellindex(w, w.p[9].r⃗⁰) == (1, 5, 2) # radial bot / azimuthal right
     end
 end

@@ -77,9 +77,9 @@ end
 
 # populate the world with preset particles at preset position for further testing
 function test_populate_world!(w::World3D)
-    w.Lx = 10.0
-    w.Ly = 8.0
-    w.Lz = 5.0
+    w.Lx = 20.0
+    w.Ly = 18.0
+    w.Lz = 15.0
     w.Ω₀ = 2.0
     w.Δt = (2/3w.Ω₀)*(w.Ly/w.Lx)
     # particle 1 at the center
@@ -124,7 +124,7 @@ function test_populate_world!(w::World3D)
     push!(w.p, p)
     # particle 9 at the radial bottom and azimuthal right corner
     p = Particle(1.0, 1.2, 1.0, 1.0)
-    p.r⃗⁰.x = w.Lx-1.2; p.r⃗⁰.y = w.Ly-1.2; p.r⃗⁰.z = w.Lz/2
+    p.r⃗⁰.x = 1.2; p.r⃗⁰.y = w.Ly-1.2; p.r⃗⁰.z = w.Lz/2
     p.r⃗¹.x = 2.0; p.r⃗¹.y = 0.1; p.r⃗¹.z = 0.2
     push!(w.p, p)
 end
@@ -165,6 +165,11 @@ function cellindex(w::World3D, r⃗::Vec3)
 end
 
 # TODO find images of a particle in XY plane
+function get_particle_image(w::World3D, p::Particle, n::Int, m::Int)
+    τ = mod(w.t, w.Δt)
+    p_image = Particle()
+end
+
 # TODO find neighbouring cells, taking the sheared borders into account
 # TODO check distance between two particles and their images
 # TODO calculate forces between particles
