@@ -164,10 +164,19 @@ function cellindex(w::World3D, r⃗::Vec3)
     return (Int(w.nx*r⃗.x÷w.Lx)+1, Int(w.ny*r⃗.y÷w.Ly)+1, Int(w.nz*r⃗.z÷w.Lz)+1)
 end
 
-# TODO find images of a particle in XY plane
+# creates an image particle (n,m) from the given particle
 function get_particle_image(w::World3D, p::Particle, n::Int, m::Int)
     τ = mod(w.t, w.Δt)
-    p_image = Particle()
+    p_image = Particle(p.M, p.R, p.κ, p.γ)
+    # position
+    p_image.r⃗⁰.x = p.r⃗⁰.x + n*w.Lx
+    p_image.r⃗⁰.y = p.r⃗⁰.y + m*w.Ly - (3/2)*n*w.Lx*w.Ω₀*τ
+    p_image.r⃗⁰.z = p.r⃗⁰.z
+    # velocity
+    p_image.r⃗¹.x = p.r⃗¹.x
+    p_image.r⃗¹.y = p.r⃗¹.y - (3/2)*n*w.Ω₀*w.Lx
+    p_image.r⃗¹.z = p.r⃗¹.z
+    return p_image
 end
 
 # TODO find neighbouring cells, taking the sheared borders into account
