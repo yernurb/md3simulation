@@ -117,5 +117,15 @@ create_linkcell!(w)
         @test cellindex(w, w.p[7].r⃗⁰) == (5, 5, 2) # radial top / azimuthal right
         @test cellindex(w, w.p[8].r⃗⁰) == (1, 1, 2) # radial bot / azimuthal left
         @test cellindex(w, w.p[9].r⃗⁰) == (1, 5, 2) # radial bot / azimuthal right
+        p = get_particle_image(w, w.p[1], 0, 0)
+        @test (p.r⃗⁰.x == w.p[1].r⃗⁰.x) & (p.r⃗⁰.y == w.p[1].r⃗⁰.y) & (p.r⃗⁰.z == w.p[1].r⃗⁰.z)
+        @test (p.r⃗¹.x == w.p[1].r⃗¹.x) & (p.r⃗¹.y == w.p[1].r⃗¹.y) & (p.r⃗¹.z == w.p[1].r⃗¹.z)
+        p = get_particle_image(w, w.p[2], 1, 0)
+        @test (p.r⃗⁰.x == w.p[2].r⃗⁰.x + w.Lx) & (p.r⃗⁰.y == w.p[2].r⃗⁰.y) & (p.r⃗⁰.z == w.p[2].r⃗⁰.z)
+        @test (p.r⃗¹.x == w.p[2].r⃗¹.x) & (p.r⃗¹.y == w.p[2].r⃗¹.y-(3/2)*w.Ω₀*w.Lx) & (p.r⃗¹.z == w.p[2].r⃗¹.z)
+        w.t = 2.0
+        p = get_particle_image(w, w.p[3],-1, 0)
+        @test (p.r⃗⁰.x == w.p[3].r⃗⁰.x - w.Lx) & (p.r⃗⁰.y == w.p[3].r⃗⁰.y + (3/2)*w.Lx*w.Ω₀*mod(w.t, w.Δt)) & (p.r⃗⁰.z == w.p[3].r⃗⁰.z)
+        @test (p.r⃗¹.x == w.p[3].r⃗¹.x) & (p.r⃗¹.y == w.p[3].r⃗¹.y+(3/2)*w.Ω₀*w.Lx) & (p.r⃗¹.z == w.p[3].r⃗¹.z)
     end
 end

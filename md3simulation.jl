@@ -179,14 +179,41 @@ function get_particle_image(w::World3D, p::Particle, n::Int, m::Int)
     return p_image
 end
 
-# TODO find neighbouring cells, taking the sheared borders into account
-# TODO check distance between two particles and their images
+# finds all neighbouring cells of the given position, taking the sheared borders into account
+function get_neighbor_cells(w::World3D, r⃗::Vec3)
+    neighbours = Vector{Any}()
+    idx_x, idx_y, idx_z = cellindex(w, r⃗)
+    for nx = -1:1, ny = -1:1, nz = -1:1
+        idx_nx += nx; idx_ny += ny; idx_nz += nz
+        if checkbounds(Bool, w.lc, idx_nx, idx_ny, idx_nz)    
+            push!(neighbours, (idx_nx, idx_ny, idx_nz))
+        end
+    end
+end
+
+# Find the minimal distance between particle i and all images of particle j. Returns the minimal
+# distance and box indices of the image
+function get_distance(w::World3D, i::Int, j::Int)
+    p = w.p[i]; p_ref = w.p[j]
+    Δ = w.Lx + w.Ly + w.Lz
+    n_ref, m_ref = -2, -2
+    for n = -1:1, m = -1:1
+        p_image = get_particle_image(w, p_ref, n, m)
+        distance = norm(p.r⃗⁰ - p_image.r⃗⁰)
+        if Δ > distance
+            Δ = distance
+            n_ref = n; m_ref = m
+        end
+    end
+    return (Δ, n_ref, m_ref)
+end
+
 # TODO calculate forces between particles
 # TODO predictor
 # TODO corrector
 # TODO make step and update world
 
 
-export Particle, World3D, test_populate_world!, create_linkcell!, cellindex
+export Particle, World3D, test_populate_world!, create_linkcell!, cellindex, get_particle_image
 
 end  # module MD3simulation
